@@ -1,9 +1,7 @@
-const amount = 12
+const names = require("./names");
+const sayHi = require("./utils");
 
-if(amount <10){
-    console.log("small number")
-} else {
-    console.log("large number")
-}
-
-console.log(`First app`)
+sayHi(names.rahul);
+sayHi(names.raj);
+// console.log(names.rahul);
+// console.log(names.raj);
