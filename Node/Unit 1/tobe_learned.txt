@@ -1,0 +1,5 @@
+---Unit 1---
+1. example of File System (fs)
+2. brief explanation of Streams and Buffers with example 
+3. Understand what is asynchronous and synchronous operations 
+4. Understand Async and Await in depth
