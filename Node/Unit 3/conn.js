@@ -7,3 +7,5 @@ mongoose
   .connect(mongoURI)
   .then(() => console.log("Connection to MongoDB Atlas!"))
   .catch((err) => console.error("Connection Error: ", err));
+
+module.exports = mongoose;
