@@ -1,65 +1,62 @@
 const express = require("express");
 const app = express();
 
-// Built-in middleware to parse JSON requests
-app.use(express.json());
+app.use(express.json()); // Parse JSON data
 
-let tasks = [
-  { id: 1, title: "Learn Node.js", completed: false },
-  { id: 2, title: "Learn Express.js", completed: false },
+let users = [
+  { id: 1, name: "John Doe" },
+  { id: 2, name: "Jane Doe" },
 ];
 
-// GET all tasks
-app.get("/tasks", (req, res) => {
-  res.status(200).json(tasks);
-});
-
-// POST (Create) a new task
-app.post("/tasks", (req, res) => {
-  const { title, completed } = req.body; // Extract data from request body
-  if (!title) {
-    return res.status(400).json({ error: "Title is required!" });
+// GET all users
+app.get("/users", (req, res, next) => {
+  if (!users) {
+    const error = new Error("Users not found");
+    next(error);
   }
-  const newTask = {
-    id: tasks.length + 1,
-    title,
-    completed: completed || false,
-  };
-  tasks.push(newTask); // Add to the list
-  res.status(201).json(newTask); // Respond with the created task
+  res.json(users);
 });
 
-// PUT (Update) a task
-app.put("/tasks/:id", (req, res) => {
-  const { id } = req.params; // Extract the task ID from the URL
-  const { title, completed } = req.body; // Extract data from the request body
-
-  const task = tasks.find((t) => t.id === parseInt(id));
-  if (!task) {
-    return res.status(404).json({ error: "Task not found!" });
+// GET a single user
+app.get("/users/:id", (req, res, next) => {
+  const user = users.find((u) => u.id === parseInt(req.params.id));
+  if (!user) {
+    const error = new Error("User not found");
+    return next(error);
   }
-
-  // Update the task's properties
-  if (title) task.title = title;
-  if (completed !== undefined) task.completed = completed;
-
-  res.status(200).json(task); // Respond with the updated task
+  res.json(user);
 });
 
-// DELETE a task
-app.delete("/tasks/:id", (req, res) => {
-  const { id } = req.params; // Extract the task ID from the URL
+// POST a new user
+app.post("/users", (req, res) => {
+  const user = { id: users.length + 1, name: req.body.name };
+  users.push(user);
+  res.status(201).json(user);
+});
 
-  const index = tasks.findIndex((t) => t.id === parseInt(id));
-  if (index === -1) {
-    return res.status(404).json({ error: "Task not found!" });
+// PUT (update) a user
+app.put("/users/:id", (req, res, next) => {
+  const user = users.find((u) => u.id === parseInt(req.params.id));
+  if (!user) {
+    const error = new Error("User not found");
+    return next(error);
   }
-
-  tasks.splice(index, 1); // Remove the task
-  res.status(200).json({ message: "Task deleted successfully!" });
+  user.name = req.body.name;
+  res.json(user);
 });
 
-// Start the server
+// DELETE a user
+app.delete("/users/:id", (req, res) => {
+  users = users.filter((u) => u.id !== parseInt(req.params.id));
+  res.send("User deleted!");
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  res.status(500).json({ error: err.message });
+});
+
+// Start server
 app.listen(3000, () => {
   console.log("Server running on http://localhost:3000");
 });
