@@ -7,6 +7,7 @@ mongoose
   .connect(mongoURI)
   .then(() => {
     console.log("Connected to MongoDB");
+
     const userSchema = new mongoose.Schema({
       name: { type: String, required: true },
       email: { type: String, required: true, unique: true },
@@ -17,13 +18,15 @@ mongoose
     const User = mongoose.model("User", userSchema);
 
     const newUser = new User({
-      name: "John",
-      email: "john@example.com",
+      name: "Lolita",
+      email: "darling@example.com",
     });
 
     newUser
       .save()
       .then(() => console.log("User saved!"))
       .catch((err) => console.log("error saving user:", err));
+
+    module.exports = User;
   })
   .catch((err) => console.error("Error: ", err));
