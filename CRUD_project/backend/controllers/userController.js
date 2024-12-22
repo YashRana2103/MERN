@@ -31,13 +31,28 @@ const createUser = async (req, res) => {
     if (!req.body.name || !req.body.email) {
       return res.status(400).send("Name and email are required");
     }
+
+    console.log("Checking if user exists...");
+    const { name, email, age } = req.body;
+
+    const existingUser = await User.findOne({ email });
+
+    if (existingUser) {
+      console.log("User with this email already exists");
+      return res.status(400).send("User with this email already exists");
+    }
+
     console.log("Creating user...");
-    const { name, email } = req.body;
-    const newUser = await User.create({ name, email });
+    let newUser = {};
+    if (age === "" || age === null || age === undefined) {
+      newUser = await User.create({ name, email });
+    } else {
+      newUser = await User.create({ name, email, age });
+    }
     res.status(201).json(newUser);
     console.log("User created!");
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    res.status(500).json({ error: err.message });
   }
 };
 
