@@ -3,6 +3,7 @@ const User = require("../models/userModel");
 // get all users
 const getUsers = async (req, res) => {
   try {
+    console.log("Fetching all users...");
     const users = await User.find();
     res.status(200).json(users);
   } catch (err) {
@@ -13,6 +14,7 @@ const getUsers = async (req, res) => {
 // get a single user by ID
 const getUserById = async (req, res) => {
   try {
+    console.log("Fetching user...");
     const user = await User.findById(req.params.id);
     if (!user) return res.status(404).json({ error: "User not found" });
     res.status(200).json(user);
@@ -24,6 +26,7 @@ const getUserById = async (req, res) => {
 // create a new user
 const createUser = async (req, res) => {
   try {
+    console.log("Creating user...");
     const { name, email } = req.body;
     const newUser = await User.create({ name, email });
     res.status(201).json(newUser);
@@ -35,6 +38,7 @@ const createUser = async (req, res) => {
 // update an existing user
 const updateUser = async (req, res) => {
   try {
+    console.log("Updating user...");
     const { name, email } = req.body;
     const updatedUser = await User.findByIdAndUpdate(
       req.params.id,
@@ -51,6 +55,7 @@ const updateUser = async (req, res) => {
 // delete a user
 const deleteUser = async (req, res) => {
   try {
+    console.log("Deleting user...");
     const deletedUser = await User.findByIdAndDelete(req.params.id);
     if (!deleteUser) return res.status(404).json({ error: "User not found" });
     res.status(200).json({ message: "User deleted successfully" });
