@@ -6,6 +6,7 @@ const getUsers = async (req, res) => {
     console.log("Fetching all users...");
     const users = await User.find();
     res.status(200).json(users);
+    console.log("Users Fetched");
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -18,6 +19,7 @@ const getUserById = async (req, res) => {
     const user = await User.findById(req.params.id);
     if (!user) return res.status(404).json({ error: "User not found" });
     res.status(200).json(user);
+    console.log("User Fetched");
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -26,10 +28,14 @@ const getUserById = async (req, res) => {
 // create a new user
 const createUser = async (req, res) => {
   try {
+    if (!req.body.name || !req.body.email) {
+      return res.status(400).send("Name and email are required");
+    }
     console.log("Creating user...");
     const { name, email } = req.body;
     const newUser = await User.create({ name, email });
     res.status(201).json(newUser);
+    console.log("User created!");
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
@@ -47,6 +53,7 @@ const updateUser = async (req, res) => {
     );
     if (!updatedUser) return res.status(404).json({ error: "User not found" });
     res.status(200).json(updatedUser);
+    console.log("User Updated!");
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -59,6 +66,7 @@ const deleteUser = async (req, res) => {
     const deletedUser = await User.findByIdAndDelete(req.params.id);
     if (!deleteUser) return res.status(404).json({ error: "User not found" });
     res.status(200).json({ message: "User deleted successfully" });
+    console.log("User Deleted!");
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
