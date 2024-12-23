@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import API from "../api";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const [users, setUsers] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -18,20 +20,28 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="p-6 bg-theme-light min-h-screen">
-      <h1 className="text-3xl font-bold text-theme-dark mb-4">Users</h1>
-      <ul className="space-y-4">
+    <div className="min-h-screen bg-[#90C3C8] flex flex-col items-center py-8">
+      <h1 className="text-3xl font-bold text-[#1F5673] mb-6">User List</h1>
+      <div className="w-full max-w-3xl">
         {users.map((user) => (
-          <li
+          <div
             key={user._id}
-            className="bg-theme-secondary text-theme-light p-4 rounded-md shadow-md"
+            className="bg-white p-4 rounded-md shadow-md mb-4 flex justify-between items-center"
           >
-            <p className="text-lg font-semibold">{user.name}</p>
-            <p>{user.email}</p>
-            <p>{user.age}</p>
-          </li>
+            <div>
+              <h3 className="text-lg font-bold text-[#1F5673]">{user.name}</h3>
+              <p className="text-sm text-[#463730]">Email: {user.email}</p>
+              <p className="text-sm text-[#463730]">Age: {user.age}</p>
+            </div>
+            <button
+              className="bg-[#1F5673] text-white py-2 px-4 rounded-md hover:bg-[#759FBC] transition"
+              onClick={() => navigate(`/edit/${user._id}`)}
+            >
+              Edit
+            </button>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 };
