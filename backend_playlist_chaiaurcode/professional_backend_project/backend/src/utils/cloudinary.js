@@ -10,6 +10,9 @@ cloudinary.config({
 const uploadOnCloudinary = async (localFilePath) => {
   try {
     if (!localFilePath) return null;
+    if (!fs.existsSync(localFilePath)) {
+      return console.error("File does not exist!");
+    }
     //upload file on cloudinary
     const response = await cloudinary.uploader.upload(localFilePath, {
       resource_type: "auto",
